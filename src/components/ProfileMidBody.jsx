@@ -83,8 +83,8 @@ export default function ProfileMidBody() {
             <Nav.Link eventKey="/link-4">Likes</Nav.Link>
         </Nav.Item>
     </Nav>
-    {posts.map((post) => (
-        <ProfilePostCard key={post.id} content={post.content} />
+    {posts.length > 0 && posts.map((post) => (
+        <ProfilePostCard key={post.id} content={post.content} postId={post.id} />
     ))}
     </Col>
     )
