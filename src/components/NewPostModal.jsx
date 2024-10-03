@@ -20,7 +20,7 @@ export default function NewPostModal({ show, handleClose }) {
         <Modal.Body>
           <Form>
             <Form.Group controlId="postContent">
-              <Form.Control 
+              <Form.Control
                 placeholder="What is happening?!"
                 as="textarea"
                 rows={3}
