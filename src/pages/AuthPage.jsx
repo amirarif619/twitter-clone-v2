@@ -2,6 +2,8 @@ import {
     createUserWithEmailAndPassword,
     getAuth,
     signInWithEmailAndPassword,
+    GoogleAuthProvider,
+    signInWithPopup
 } from "firebase/auth";
 import { Col, Row, Image, Button, Modal, Form} from "react-bootstrap";
 import { useState, useEffect, useContext } from "react";
@@ -20,7 +22,7 @@ export default function AuthPage() {
     const auth = getAuth();
 
     const { currentUser } = useContext(AuthContext);
-    
+    const provider = new GoogleAuthProvider();
     useEffect(() => {
         if (currentUser) navigate("/profile");
     }, [currentUser, navigate]);
@@ -52,6 +54,18 @@ export default function AuthPage() {
         }
     };
 
+const handleGoogleLogin = async(e) => {
+    e.preventDefault();
+    try {
+       await signInWithPopup(auth, provider);
+    } catch (error){
+        console.error(error)
+    }
+}
+ 
+
+
+
   return (
    <Row>
     <Col sm={6}>
@@ -65,7 +79,11 @@ export default function AuthPage() {
     <h2 className="my-5" style={{ fontSize: 31}}>Join Twitter Today.</h2>
 
     <Col sm={5} className="d-grid gap-2">
-        <Button className="rounded-pill" variant="outline-dark">
+        <Button 
+        className="rounded-pill" 
+        variant="outline-dark"
+        onClick={handleGoogleLogin}
+        >
         <i className="bi bi-google"></i> Sign up with Google
         </Button>
         <Button className="rounded-pill" variant="outline-dark">
