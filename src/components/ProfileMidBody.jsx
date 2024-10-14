@@ -1,18 +1,23 @@
 import { Col, Image, Button, Nav, Row, Spinner } from "react-bootstrap";
-import ProfilePostCard from "./ProfilePostCard";
+import  ProfilePostCard from "./ProfilePostCard";
 //import { jwtDecode } from "jwt-decode";
-//import { useEffect } from "react";
-import {  useSelector } from "react-redux";
-//import { fetchPostsByUser } from "../features/posts/postsSlice";
+import { useEffect, useContext } from "react";
+import {  useSelector, useDispatch } from "react-redux";
+import { AuthContext } from "./AuthProvider";
+import { fetchPostsByUser } from "../features/posts/postsSlice";
 
 export default function ProfileMidBody() {
     const url = "https://pbs.twimg.com/profile_banners/83072625/1602845571/1500x500";
     const pic = "https://pbs.twimg.com/profile_images/1587405892437221376/h167Jlb2_400x400.jpg";
 
-    //const dispatch = useDispatch()
+    const dispatch = useDispatch()
     const posts = useSelector(store => store.posts.posts)
     const loading = useSelector(store => store.posts.loading)
+    const { currentUser } = useContext(AuthContext);
 
+    useEffect(() => {
+        dispatch(fetchPostsByUser(currentUser.uid));
+    }, [dispatch, currentUser]);
     
    // useEffect(() => {
         //const token = localStorage.getItem("authToken");
@@ -62,7 +67,7 @@ export default function ProfileMidBody() {
             <strong>271</strong> Following <strong>610</strong> Followers
         </p>
     
-    <Nav variant="underline" defaultActiveKeys="/home" justify>
+    <Nav variant="underline" defaultActiveKey="/home" justify>
         <Nav.Item>
             <Nav.Link eventKey="/home">Tweets</Nav.Link>
         </Nav.Item>
@@ -85,8 +90,7 @@ export default function ProfileMidBody() {
     {posts.map((post) => (
         <ProfilePostCard 
         key={post.id} 
-        content={post.content} 
-        postId={post.id} />
+        post={post} />
     ))}
     </Col>
     )
