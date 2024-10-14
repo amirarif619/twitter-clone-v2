@@ -6,14 +6,14 @@ import { likePost, removeLikeFromPost } from "../features/posts/postsSlice";
 import { AuthContext } from "./AuthProvider"; 
 
 export default function ProfilePostCard({ post}) {
-    const { content, id: postId } = post;
+    const { content, id: postId, imageUrl } = post;
     const [likes, setLikes ] = useState(post.likes || []);
     const dispatch = useDispatch();
     const { currentUser } = useContext(AuthContext);
     const userId = currentUser.uid;
 
     const isLiked = likes.includes(userId);
-    
+
     const pic = " https://pbs.twimg.com/profile_images/1587405892437221376/h167Jlb2_400x400.jpg";
 
     const handleLike = () => (isLiked ? removeFromLikes() : addToLikes());
@@ -45,6 +45,7 @@ export default function ProfilePostCard({ post}) {
             <strong>Haris</strong>
             <span> @haris.samingan . Apr 16</span>
             <p>{content}</p>
+            <Image src={imageUrl} style={{ width: 150 }} />
             <div className="d-flex justify-content-between">
                 <Button variant="light">
                     <i className="bi bi-chat"></i>
