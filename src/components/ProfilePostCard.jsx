@@ -2,8 +2,9 @@ import { Col, Row, Image, Button } from "react-bootstrap";
 import { useState } from "react";
 import { useContext} from "react";
 import { useDispatch } from "react-redux";
-import { likePost, removeLikeFromPost } from "../features/posts/postsSlice";
+import { deletePost, likePost, removeLikeFromPost } from "../features/posts/postsSlice";
 import { AuthContext } from "./AuthProvider"; 
+import UpdatePostModal from "./UpdatePostModal";
 
 export default function ProfilePostCard({ post}) {
     const { content, id: postId, imageUrl } = post;
@@ -16,6 +17,10 @@ export default function ProfilePostCard({ post}) {
 
     const pic = " https://pbs.twimg.com/profile_images/1587405892437221376/h167Jlb2_400x400.jpg";
 
+    const [showUpdateModal, setShowUpdateModal] = useState(false);
+
+    const handleShowUpdateModal = () => setShowUpdateModal(true);
+    const handleCloseUpdateModal = () => setShowUpdateModal(false);
     const handleLike = () => (isLiked ? removeFromLikes() : addToLikes());
 
     const addToLikes = () => {
@@ -28,6 +33,9 @@ export default function ProfilePostCard({ post}) {
         dispatch(removeLikeFromPost({ userId, postId}))
     }
 
+    const handleDelete = () => {
+        dispatch(deletePost({ userId, postId }))
+    }
     return (
         <Row
         className="p-3"
@@ -67,6 +75,21 @@ export default function ProfilePostCard({ post}) {
                 <Button variant="light">
                     <i className="bi bi-upload"></i>
                 </Button>
+                <Button variant="light">
+                    <i
+                    className="bi bi-pencil-square"
+                    onClick={handleShowUpdateModal}
+                    ></i>
+                </Button>
+                <Button variant="light" onClick={handleDelete}>
+                    <i className="bi bi-trash"></i>
+                </Button>
+                <UpdatePostModal
+                    show={showUpdateModal}
+                    handleClose={handleCloseUpdateModal}
+                    postId = {postId}
+                    originalPostContent={content}
+                    />
             </div>
         </Col>
         </Row>
